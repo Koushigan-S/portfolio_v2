@@ -179,7 +179,7 @@ export default function Hero() {
           <div className="relative w-full max-w-[280px] sm:max-w-[320px] aspect-[2/3] rounded-2xl overflow-hidden border border-border-color bg-neutral-950 shadow-[0_0_50px_rgba(255,255,255,0.02)] group">
             {/* The grayscale to color portrait */}
             <img
-              src="/avatar.png"
+              src="/avatar.jpg"
               alt="Koushigan S"
               className="w-full h-full object-cover filter grayscale contrast-[1.1] opacity-80 transition-all duration-700 group-hover:grayscale-0 group-hover:opacity-100 group-hover:contrast-100"
             />
