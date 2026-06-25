@@ -43,7 +43,13 @@ CONTACT:
   return (
     <section id="resume" className="py-24 px-6 md:px-12 bg-black border-t border-border-color select-none">
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-12">
-        <div className="space-y-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-4"
+        >
           <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">05 / Credentials</span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
             Resume / CV
@@ -51,12 +57,12 @@ CONTACT:
           <p className="text-secondary-text text-sm md:text-base max-w-md mx-auto">
             View or download my technical profile outlining detailed experience and achievements.
           </p>
-        </div>
+        </motion.div>
 
         {/* Minimalist interactive Resume Card Preview */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 30, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="w-full max-w-sm aspect-[1/1.4] bg-secondary-bg border border-border-color rounded-2xl p-8 text-left flex flex-col justify-between shadow-2xl relative overflow-hidden group"

@@ -8,7 +8,13 @@ export default function Skills() {
   return (
     <section id="skills" className="py-24 px-6 md:px-12 bg-black border-t border-border-color select-none">
       <div className="max-w-6xl mx-auto space-y-12">
-        <div className="space-y-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-4"
+        >
           <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">03 / Capabilities</span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
             Technical Skills
@@ -16,15 +22,15 @@ export default function Skills() {
           <p className="text-secondary-text text-sm md:text-base max-w-xl">
             A structured index of technologies, languages, and methodologies I work with.
           </p>
-        </div>
+        </motion.div>
 
         {/* Categories Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
           {skillCategories.map((category, index) => (
             <motion.div
               key={category.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{

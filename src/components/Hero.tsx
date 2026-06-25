@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion, Variants } from "framer-motion";
+import TextDistort from "./TextDistort";
 
 export default function Hero() {
   const containerVariants: Variants = {
@@ -10,19 +11,30 @@ export default function Hero() {
       opacity: 1,
       transition: {
         staggerChildren: 0.15,
-        delayChildren: 0.2,
+        delayChildren: 0.5,
       },
     },
   };
 
-  const itemVariants: Variants = {
-    hidden: { y: 30, opacity: 0 },
+  const lineVariants: Variants = {
+    hidden: { y: "100%" },
+    visible: {
+      y: 0,
+      transition: {
+        duration: 1,
+        ease: [0.16, 1, 0.3, 1], // Apple ease
+      },
+    },
+  };
+
+  const fadeUpVariants: Variants = {
+    hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: [0.16, 1, 0.3, 1], // Apple cubic bezier
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
@@ -36,44 +48,60 @@ export default function Hero() {
         className="max-w-4xl space-y-8"
       >
         <motion.p
-          variants={itemVariants}
-          className="text-sm font-semibold tracking-widest text-secondary-text uppercase"
+          variants={fadeUpVariants}
+          className="text-xs font-semibold tracking-widest text-secondary-text uppercase font-mono"
         >
-          Nova — Portfolio
+          Nova — Systems Architecture
         </motion.p>
         
-        <motion.h1
-          variants={itemVariants}
-          className="text-4xl md:text-7xl font-bold tracking-tight text-white leading-[1.1]"
-        >
-          Building systems,
-          <br />
-          products, and ideas
-          <br />
-          for the future.
-        </motion.h1>
+        {/* Typographic Mask Reveal */}
+        <h1 className="text-4xl md:text-7xl font-bold tracking-tight text-white leading-[1.1] flex flex-col">
+          <span className="block overflow-hidden py-1">
+            <motion.span variants={lineVariants} className="block">
+              Building systems,
+            </motion.span>
+          </span>
+          <span className="block overflow-hidden py-1">
+            <motion.span variants={lineVariants} className="block">
+              products, and ideas
+            </motion.span>
+          </span>
+          <span className="block overflow-hidden py-1 text-secondary-text">
+            <motion.span variants={lineVariants} className="block">
+              for the future.
+            </motion.span>
+          </span>
+        </h1>
 
-        <motion.div variants={itemVariants} className="max-w-2xl space-y-4">
-          <p className="text-lg md:text-2xl text-secondary-text leading-relaxed">
+        <motion.div variants={fadeUpVariants} className="max-w-xl space-y-4">
+          <p className="text-base md:text-xl text-secondary-text leading-relaxed font-light">
             Computer Science Engineering Student.
             <br />
-            Focused on software, cloud, systems, and innovation.
+            Focused on software, cloud, systems, and product innovation.
           </p>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="flex flex-wrap gap-4 pt-4">
-          <a
+        {/* Tactile Button Actions */}
+        <motion.div variants={fadeUpVariants} className="flex flex-wrap gap-4 pt-4">
+          <motion.a
             href="#projects"
-            className="px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-white/90 active:scale-95 transition-all duration-300"
+            whileHover={{ scale: 1.04, backgroundColor: "#f4f4f5" }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="px-6 py-3 rounded-full bg-white text-black font-medium tracking-tight hover:shadow-xl hover:shadow-white/5 active:scale-95 transition-all"
           >
             View Projects
-          </a>
-          <a
+          </motion.a>
+          
+          <motion.a
             href="#resume"
-            className="px-6 py-3 rounded-full border border-border-color bg-black text-white font-medium hover:bg-white hover:text-black hover:border-white active:scale-95 transition-all duration-300"
+            whileHover={{ scale: 1.04, borderColor: "#ffffff", color: "#ffffff" }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="px-6 py-3 rounded-full border border-border-color bg-black text-secondary-text font-medium tracking-tight active:scale-95 transition-all"
           >
             Download Resume
-          </a>
+          </motion.a>
         </motion.div>
       </motion.div>
     </section>

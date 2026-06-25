@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Project } from "@/data/portfolio";
 
@@ -27,6 +27,28 @@ interface ProjectShowcaseProps {
 }
 
 export default function ProjectShowcase({ project, onClose }: ProjectShowcaseProps) {
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (shouldReduceMotion) return;
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const xc = rect.width / 2;
+    const yc = rect.height / 2;
+
+    setRotateY((x - xc) / (rect.width / 2) * 4); // max 4deg
+    setRotateX((yc - y) / (rect.height / 2) * 4);
+  };
+
+  const handleMouseLeave = () => {
+    setRotateX(0);
+    setRotateY(0);
+  };
+
   // Disable body scroll when modal is open
   useEffect(() => {
     if (project) {
@@ -53,9 +75,10 @@ export default function ProjectShowcase({ project, onClose }: ProjectShowcasePro
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.98 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="fixed inset-0 z-50 overflow-y-auto bg-black/95 backdrop-blur-lg no-scrollbar"
       >
         {/* Navigation bar inside showcase */}
@@ -127,8 +150,15 @@ export default function ProjectShowcase({ project, onClose }: ProjectShowcasePro
               {project.architecture}
             </p>
             
-            {/* Elegant text diagram layout */}
-            <div className="border border-border-color/60 rounded-xl p-6 font-mono text-xs md:text-sm text-secondary-text bg-black/50 space-y-4 overflow-x-auto">
+            {/* Elegant text diagram layout with 3D tilt */}
+            <motion.div
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              animate={{ rotateX, rotateY }}
+              transition={{ type: "spring", stiffness: 200, damping: 20 }}
+              style={{ transformStyle: "preserve-3d", transform: "perspective(1000px)" }}
+              className="border border-border-color/60 rounded-xl p-6 font-mono text-xs md:text-sm text-secondary-text bg-black/50 space-y-4 overflow-x-auto"
+            >
               <div className="text-white border-b border-border-color/40 pb-2 flex items-center justify-between">
                 <span>SYSTEM BLOCK DIAGRAM</span>
                 <span className="text-xxs px-2 py-0.5 rounded border border-white/20">Active Node</span>
@@ -151,7 +181,7 @@ export default function ProjectShowcase({ project, onClose }: ProjectShowcasePro
                   Engine Core / Storage Operations
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Section 4: Specifications & Technologies */}

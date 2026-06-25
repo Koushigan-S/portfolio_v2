@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import { Project, projects } from "@/data/portfolio";
 
@@ -10,123 +10,197 @@ interface FeaturedProjectsProps {
 }
 
 export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
+  const wheelTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      setShowLeftArrow(scrollRef.current.scrollLeft > 20);
-    }
+  const nextProject = () => {
+    setActiveIndex((prev) => (prev + 1) % projects.length);
   };
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollAmount = clientWidth * 0.75;
-      const targetScroll =
-        direction === "left"
-          ? scrollLeft - scrollAmount
-          : scrollLeft + scrollAmount;
+  const prevProject = () => {
+    setActiveIndex((prev) => (prev - 1 + projects.length) % projects.length);
+  };
+
+  // Mouse wheel scroll navigation
+  const handleWheel = (e: React.WheelEvent) => {
+    if (shouldReduceMotion) return;
+    
+    // Check if the scroll event is significant enough
+    if (Math.abs(e.deltaY) > 25 || Math.abs(e.deltaX) > 25) {
+      e.preventDefault();
       
-      scrollRef.current.scrollTo({
-        left: targetScroll,
-        behavior: "smooth",
-      });
+      if (wheelTimeout.current) return;
+      
+      if (e.deltaY > 0 || e.deltaX > 0) {
+        nextProject();
+      } else {
+        prevProject();
+      }
+
+      // 400ms throttle to prevent fast scrolling skips
+      wheelTimeout.current = setTimeout(() => {
+        wheelTimeout.current = null;
+      }, 400);
     }
   };
+
+  // Clean up wheel timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (wheelTimeout.current) clearTimeout(wheelTimeout.current);
+    };
+  }, []);
 
   return (
-    <section id="projects" className="relative py-24 bg-black border-t border-border-color select-none">
-      <div className="px-6 md:px-12 mb-8">
-        <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">01 / Showcase</span>
+    <section id="projects" className="py-24 bg-black border-t border-border-color select-none overflow-hidden relative">
+      <div className="px-6 md:px-12 mb-12 max-w-6xl mx-auto">
+        <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">01 / Products</span>
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white mt-2">
           Featured Work
         </h2>
-        <p className="text-secondary-text mt-2 text-sm md:text-base">
-          Browse through some of my core software engineering and system architecture builds.
+        <p className="text-secondary-text mt-2 text-sm md:text-base max-w-md">
+          Scroll, drag, or swipe to explore. Click the center card to launch the product showcase.
         </p>
       </div>
 
-      {/* Horizontal scrolling viewport container */}
-      <div className="relative group">
-        {/* Left scroll control button */}
-        {showLeftArrow && (
+      {/* 3D Carousel Stage */}
+      <div
+        onWheel={handleWheel}
+        className="w-full flex flex-col items-center justify-center py-8 relative"
+      >
+        {/* Navigation Arrows */}
+        <div className="absolute inset-x-6 md:inset-x-12 top-1/2 -translate-y-1/2 flex justify-between z-20 pointer-events-none">
           <button
-            onClick={() => scroll("left")}
-            className="absolute left-0 top-[40%] -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-12 h-20 bg-black/80 border-r border-y border-border-color hover:bg-white hover:text-black transition-colors duration-300 backdrop-blur-sm"
-            aria-label="Scroll left"
+            onClick={prevProject}
+            className="pointer-events-auto flex items-center justify-center w-12 h-12 rounded-full border border-border-color bg-black/60 hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm shadow-xl active:scale-90"
+            aria-label="Previous Project"
           >
-            <ChevronLeft size={24} />
+            <ChevronLeft size={20} />
           </button>
-        )}
+          <button
+            onClick={nextProject}
+            className="pointer-events-auto flex items-center justify-center w-12 h-12 rounded-full border border-border-color bg-black/60 hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm shadow-xl active:scale-90"
+            aria-label="Next Project"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
 
-        {/* Horizontal lane */}
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth px-6 md:px-12 py-6 cursor-grab active:cursor-grabbing snap-x snap-mandatory"
+        {/* Dynamic Drag/Swipe Area */}
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          onDragEnd={(e, info) => {
+            // Register swiping gesture
+            if (info.offset.x > 80) prevProject();
+            else if (info.offset.x < -80) nextProject();
+          }}
+          className="relative w-full max-w-[320px] md:max-w-[450px] aspect-[16/10] flex items-center justify-center cursor-grab active:cursor-grabbing"
+          style={{
+            perspective: 1200,
+            transformStyle: "preserve-3d",
+          }}
         >
-          {projects.map((project) => (
-            <motion.div
-              key={project.id}
-              className="flex-shrink-0 w-[290px] md:w-[350px] aspect-[16/10] bg-card-bg border border-border-color rounded-xl overflow-hidden cursor-pointer relative group/card snap-start"
-              whileHover={{
-                scale: 1.05,
-                y: -5,
-                borderColor: "#ffffff",
-                transition: { duration: 0.4, ease: [0.25, 1, 0.5, 1] }, // Netflix-like ease
-              }}
-              onClick={() => onSelectProject(project)}
-            >
-              {/* Internal card wrapper */}
-              <div className="absolute inset-0 flex flex-col justify-between p-6 bg-gradient-to-t from-black via-black/40 to-transparent">
-                {/* Top sector: tags */}
-                <div className="flex justify-between items-start opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
-                  <span className="text-[10px] font-mono tracking-wider text-secondary-text uppercase px-2 py-0.5 border border-border-color bg-black/60 rounded">
-                    Engine
+          {projects.map((project, index) => {
+            const offset = index - activeIndex;
+            const isCenter = offset === 0;
+            
+            // Calculate 3D translation metrics based on index offsets
+            const rotateYValue = shouldReduceMotion ? 0 : offset * -22;
+            const zValue = shouldReduceMotion ? 0 : Math.abs(offset) * -160;
+            const scaleValue = 1 - Math.min(Math.abs(offset) * 0.15, 0.3);
+            const opacityValue = 1 - Math.min(Math.abs(offset) * 0.5, 0.75);
+            
+            // horizontal spacing factor
+            const xOffset = shouldReduceMotion
+              ? offset * 320
+              : offset * (typeof window !== "undefined" && window.innerWidth < 768 ? 90 : 150);
+
+            return (
+              <motion.div
+                key={project.id}
+                animate={{
+                  x: xOffset,
+                  scale: scaleValue,
+                  rotateY: rotateYValue,
+                  z: zValue,
+                  opacity: opacityValue,
+                  zIndex: 10 - Math.abs(offset),
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 26,
+                  mass: 0.6,
+                }}
+                className={`absolute w-full h-full bg-card-bg border rounded-2xl overflow-hidden p-6 flex flex-col justify-between select-none ${
+                  isCenter ? "border-white shadow-[0_10px_30px_rgba(255,255,255,0.05)]" : "border-border-color"
+                }`}
+                onClick={() => {
+                  if (isCenter) {
+                    onSelectProject(project);
+                  } else {
+                    setActiveIndex(index);
+                  }
+                }}
+              >
+                {/* Visual grid / details */}
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] font-mono tracking-widest text-secondary-text uppercase px-2 py-0.5 border border-border-color bg-black/60 rounded">
+                    Engine {index + 1}
                   </span>
-                  <ArrowUpRight size={16} className="text-secondary-text group-hover/card:text-white transition-colors duration-300" />
+                  
+                  {isCenter && (
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className="flex items-center gap-1.5 text-xs text-white bg-white/10 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/10"
+                    >
+                      <span>Explore</span>
+                      <ArrowUpRight size={12} />
+                    </motion.div>
+                  )}
                 </div>
 
-                {/* Bottom sector: details & text info */}
-                <div className="space-y-2 mt-auto">
-                  <h3 className="text-lg md:text-xl font-bold text-white tracking-tight leading-tight">
+                <div className="space-y-3">
+                  <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight leading-tight">
                     {project.title}
                   </h3>
                   
-                  {/* Expanded block on hover */}
-                  <div className="max-h-0 opacity-0 overflow-hidden group-hover/card:max-h-40 group-hover/card:opacity-100 transition-all duration-500 ease-[0.25,1,0.5,1] space-y-3">
-                    <p className="text-xs text-secondary-text line-clamp-2">
-                      {project.description}
-                    </p>
-                    
-                    {/* Tech tag list */}
-                    <div className="flex flex-wrap gap-1">
-                      {project.techStack.slice(0, 3).map((tech) => (
-                        <span key={tech} className="text-[9px] font-mono text-white/80 bg-white/10 px-2 py-0.5 rounded">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
+                  <p className="text-xs md:text-sm text-secondary-text leading-relaxed line-clamp-2">
+                    {project.description}
+                  </p>
 
-                    <button className="text-[11px] font-mono tracking-widest text-white uppercase border-b border-white pb-0.5 hover:text-secondary-text hover:border-secondary-text transition-colors duration-300">
-                      Explore
-                    </button>
+                  <div className="flex flex-wrap gap-1.5 pt-2">
+                    {project.techStack.slice(0, 3).map((tech) => (
+                      <span
+                        key={tech}
+                        className="text-[9px] font-mono text-white/70 bg-white/5 border border-white/5 px-2 py-0.5 rounded"
+                      >
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      </div>
 
-        {/* Right scroll control button */}
-        <button
-          onClick={() => scroll("right")}
-          className="absolute right-0 top-[40%] -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-12 h-20 bg-black/80 border-l border-y border-border-color hover:bg-white hover:text-black transition-colors duration-300 backdrop-blur-sm"
-          aria-label="Scroll right"
-        >
-          <ChevronRight size={24} />
-        </button>
+      {/* Indicator Dots */}
+      <div className="flex justify-center gap-2 mt-8 z-20 relative">
+        {projects.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setActiveIndex(index)}
+            className={`h-1 rounded-full transition-all duration-300 ${
+              activeIndex === index ? "w-8 bg-white" : "w-2 bg-white/20 hover:bg-white/40"
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
       </div>
     </section>
   );

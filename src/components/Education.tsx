@@ -9,20 +9,26 @@ export default function Education() {
   return (
     <section id="education" className="py-24 px-6 md:px-12 bg-secondary-bg border-t border-border-color select-none">
       <div className="max-w-4xl mx-auto space-y-12">
-        <div className="space-y-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-4"
+        >
           <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">04 / Journey</span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white font-sans">
             Education
           </h2>
-        </div>
+        </motion.div>
 
         {/* Timeline container */}
         <div className="relative border-l border-border-color pl-6 ml-4 md:ml-8 space-y-12">
           
           {/* Timeline Node 1: Degree & Institution */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -20, scale: 0.98 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="relative space-y-3"
@@ -41,8 +47,8 @@ export default function Education() {
 
           {/* Timeline Node 2: Coursework */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -20, scale: 0.98 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="relative space-y-3"
@@ -68,8 +74,8 @@ export default function Education() {
 
           {/* Timeline Node 3: Achievements */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -20, scale: 0.98 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="relative space-y-3"
@@ -93,8 +99,8 @@ export default function Education() {
 
           {/* Timeline Node 4: Future Goals */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -20, scale: 0.98 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="relative space-y-3"
