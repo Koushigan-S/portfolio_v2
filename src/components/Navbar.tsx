@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import TextDistort from "./TextDistort";
+
 
 export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
@@ -92,7 +92,7 @@ export default function Navbar() {
         >
           <div className="flex items-center">
             <a href="#" className="text-xl font-bold tracking-tight text-white select-none">
-              <TextDistort as="span">KOUSHIGAN S</TextDistort>
+              KOUSHIGAN S
             </a>
           </div>
 
@@ -110,7 +110,7 @@ export default function Navbar() {
                     isActive ? "text-white font-medium" : "text-secondary-text hover:text-white"
                   }`}
                 >
-                  <TextDistort as="span">{item.label}</TextDistort>
+                  {item.label}
                   
                   {/* Underline indicators */}
                   {isActive && (

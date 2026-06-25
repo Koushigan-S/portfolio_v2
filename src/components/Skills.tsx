@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import TextDistort from "./TextDistort";
 import { skillCategories } from "@/data/portfolio";
 
 // Helper component returning custom colorful SVG icons for all engineering skills
@@ -230,7 +231,7 @@ export default function Skills() {
         >
           <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">03 / Capabilities</span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
-            Technical Skills
+            <TextDistort>Technical Skills</TextDistort>
           </h2>
           <p className="text-secondary-text text-sm md:text-base max-w-xl">
             Hover over the icons to inspect specific tools and technologies.

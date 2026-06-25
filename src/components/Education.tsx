@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import TextDistort from "./TextDistort";
 import { education } from "@/data/portfolio";
 import { GraduationCap, Award, Compass, BookOpen } from "lucide-react";
 
@@ -18,7 +19,7 @@ export default function Education() {
         >
           <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">04 / Journey</span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white font-sans">
-            Education
+            <TextDistort>Education</TextDistort>
           </h2>
         </motion.div>
 

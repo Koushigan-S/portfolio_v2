@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Mail, ArrowUp } from "lucide-react";
 import { contactInfo } from "@/data/portfolio";
+import TextDistort from "./TextDistort";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -60,9 +61,9 @@ export default function Contact() {
           className="text-center space-y-6"
         >
           <h2 className="text-3xl md:text-6xl font-bold tracking-tight text-white leading-tight">
-            Let's build something
+            <TextDistort>Let's build something</TextDistort>
             <br />
-            meaningful.
+            <TextDistort>meaningful.</TextDistort>
           </h2>
           <p className="text-secondary-text text-sm md:text-lg max-w-md mx-auto font-light">
             I am currently open to internship opportunities, research collaborations, and software engineering roles.

@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
+import TextDistort from "./TextDistort";
 import { Project, projects } from "@/data/portfolio";
 
 interface FeaturedProjectsProps {
@@ -55,7 +56,7 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
       <div className="px-6 md:px-12 mb-12 max-w-6xl mx-auto">
         <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">01 / Products</span>
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white mt-2">
-          Featured Work
+          <TextDistort>Featured Work</TextDistort>
         </h2>
         <p className="text-secondary-text mt-2 text-sm md:text-base max-w-md">
           Hover on side projects to rotate the deck. Click the active card to launch the product showcase.

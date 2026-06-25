@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import TextDistort from "./TextDistort";
 
 export default function About() {
   return (
@@ -16,7 +17,7 @@ export default function About() {
         >
           <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">02 / About</span>
           <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
-            I'm Koushigan S.
+            <TextDistort>I'm Koushigan S.</TextDistort>
           </h2>
         </motion.div>
 
@@ -28,11 +29,11 @@ export default function About() {
           className="space-y-8"
         >
           <p className="text-2xl md:text-4xl text-white font-light leading-[1.3] tracking-tight">
-            I enjoy building software systems,
+            <TextDistort>I enjoy building software systems,</TextDistort>
             <br />
-            exploring cloud technologies,
+            <TextDistort>exploring cloud technologies,</TextDistort>
             <br />
-            and transforming ideas into products.
+            <TextDistort>and transforming ideas into products.</TextDistort>
           </p>
           
           <p className="text-lg md:text-xl text-secondary-text max-w-2xl leading-relaxed">

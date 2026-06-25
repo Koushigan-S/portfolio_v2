@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Download, FileText } from "lucide-react";
+import TextDistort from "./TextDistort";
 
 export default function ResumeSection() {
   const handleDownload = () => {
@@ -52,7 +53,7 @@ CONTACT:
         >
           <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">05 / Credentials</span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
-            Resume / CV
+            <TextDistort>Resume / CV</TextDistort>
           </h2>
           <p className="text-secondary-text text-sm md:text-base max-w-md mx-auto">
             View or download my technical profile outlining detailed experience and achievements.
