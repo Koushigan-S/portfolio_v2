@@ -103,7 +103,7 @@ export default function Contact() {
           </div>
 
           <div className="text-xs font-mono text-center md:text-right space-y-2">
-            <p>© {new Date().getFullYear()} Nova. Built with Next.js & Tailwind.</p>
+            <p>© {new Date().getFullYear()} Koushigan S. Built with Next.js & Tailwind.</p>
             <button
               onClick={scrollToTop}
               className="inline-flex items-center gap-1 hover:text-white transition-colors duration-300 hover:underline text-[10px] uppercase tracking-wider"

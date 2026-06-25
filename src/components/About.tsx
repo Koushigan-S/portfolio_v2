@@ -16,7 +16,7 @@ export default function About() {
         >
           <span className="text-xs font-mono uppercase tracking-widest text-secondary-text">02 / About</span>
           <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
-            I'm Nova.
+            I'm Koushigan S.
           </h2>
         </motion.div>
 

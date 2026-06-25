@@ -7,7 +7,7 @@ import { Download, FileText } from "lucide-react";
 export default function ResumeSection() {
   const handleDownload = () => {
     // Generate a simple text resume dynamically for download as a placeholder
-    const resumeText = `NOVA - COMPUTER SCIENCE ENGINEERING STUDENT
+    const resumeText = `KOUSHIGAN S - COMPUTER SCIENCE ENGINEERING STUDENT
 Focus: Software Engineering, Cloud Computing, System Design
 
 EDUCATION:
@@ -25,15 +25,15 @@ SKILLS:
 - Frontend: React, Next.js, Tailwind CSS, Framer Motion, WebGL
 
 CONTACT:
-- Email: nova@example.com
-- GitHub: https://github.com
+- Email: koushigans514@gmail.com
+- GitHub: https://github.com/Koushigan-S
 `;
 
     const blob = new Blob([resumeText], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "nova_resume.txt";
+    link.download = "koushigan_s_resume.txt";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -73,7 +73,7 @@ CONTACT:
           <div className="space-y-6 relative z-10">
             <div className="flex items-center justify-between border-b border-border-color/60 pb-4">
               <div>
-                <h3 className="text-lg font-bold text-white tracking-tight">Nova</h3>
+                <h3 className="text-lg font-bold text-white tracking-tight">Koushigan S</h3>
                 <p className="text-xxs font-mono text-secondary-text">Computer Science Engineer</p>
               </div>
               <FileText className="text-secondary-text" size={24} />

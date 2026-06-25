@@ -43,7 +43,7 @@ export const projects: Project[] = [
       "Lock-free IPC via ring buffers",
       "Direct hardware I/O driver abstraction for serial ports"
     ],
-    githubUrl: "https://github.com/nova/os777"
+    githubUrl: "https://github.com/Koushigan-S/os777"
   },
   {
     id: "draft",
@@ -61,7 +61,7 @@ export const projects: Project[] = [
       "Active peer cursor tracking and live presence indicator",
       "Version history with rollback support"
     ],
-    githubUrl: "https://github.com/nova/draft"
+    githubUrl: "https://github.com/Koushigan-S/draft"
   },
   {
     id: "streak7",
@@ -79,7 +79,7 @@ export const projects: Project[] = [
       "Dynamic worker pool auto-scaling",
       "Detailed gRPC telemetry and health metrics APIs"
     ],
-    githubUrl: "https://github.com/nova/streak7"
+    githubUrl: "https://github.com/Koushigan-S/streak7"
   },
   {
     id: "tiles360",
@@ -97,7 +97,7 @@ export const projects: Project[] = [
       "Sub-16ms frame rates under heavy dataset loads",
       "Smooth multi-touch pan and pinch-to-zoom gestures"
     ],
-    githubUrl: "https://github.com/nova/tiles360"
+    githubUrl: "https://github.com/Koushigan-S/tiles360"
   },
   {
     id: "portfolio",
@@ -115,7 +115,7 @@ export const projects: Project[] = [
       "Perfect score targets on LightHouse audits",
       "No-framework raw Tailwind-configured dark layout"
     ],
-    githubUrl: "https://github.com/nova/portfolio"
+    githubUrl: "https://github.com/Koushigan-S/portfolio"
   }
 ];
 
@@ -164,7 +164,7 @@ export const education: EducationItem = {
 };
 
 export const contactInfo = {
-  githubUrl: "https://github.com",
-  linkedInUrl: "https://linkedin.com",
-  emailAddress: "nova@example.com"
+  githubUrl: "https://github.com/Koushigan-S",
+  linkedInUrl: "https://www.linkedin.com/in/koushigan-s-7541333b6/",
+  emailAddress: "koushigans514@gmail.com"
 };

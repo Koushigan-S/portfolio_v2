@@ -15,10 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nova | Systems & Software Engineering Portfolio",
-  description: "Explore the engineering portfolio of Nova. Specialized in software systems, cloud computing, system design, and product innovation.",
+  title: "Koushigan's Portfolio",
+  description: "Explore the engineering portfolio of Koushigan S. Specialized in software systems, cloud computing, system design, and product innovation.",
   keywords: [
-    "Nova",
+    "Koushigan S",
     "Software Engineer",
     "System Design",
     "Cloud Computing",
@@ -28,17 +28,17 @@ export const metadata: Metadata = {
     "Developer Portfolio",
     "B.Tech Computer Science"
   ],
-  authors: [{ name: "Nova" }],
+  authors: [{ name: "Koushigan S" }],
   openGraph: {
-    title: "Nova | Systems & Software Engineering Portfolio",
-    description: "Explore the engineering portfolio of Nova. Specialized in software systems, cloud computing, system design, and product innovation.",
+    title: "Koushigan's Portfolio",
+    description: "Explore the engineering portfolio of Koushigan S. Specialized in software systems, cloud computing, system design, and product innovation.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nova | Systems & Software Engineering Portfolio",
-    description: "Explore the engineering portfolio of Nova. Specialized in software systems, cloud computing, system design, and product innovation.",
+    title: "Koushigan's Portfolio",
+    description: "Explore the engineering portfolio of Koushigan S. Specialized in software systems, cloud computing, system design, and product innovation.",
   },
 };
 

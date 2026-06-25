@@ -92,7 +92,7 @@ export default function Navbar() {
         >
           <div className="flex items-center">
             <a href="#" className="text-xl font-bold tracking-tight text-white select-none">
-              <TextDistort as="span">NOVA</TextDistort>
+              <TextDistort as="span">KOUSHIGAN S</TextDistort>
             </a>
           </div>
 
