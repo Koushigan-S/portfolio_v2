@@ -66,9 +66,6 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           />
         </div>
 
-        <span className="text-[10px] font-mono tracking-widest text-secondary-text uppercase animate-pulse">
-          Engine Booting
-        </span>
       </div>
     </motion.div>
   );

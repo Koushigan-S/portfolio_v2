@@ -11,6 +11,7 @@ interface FeaturedProjectsProps {
 
 export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const wheelTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -26,7 +27,6 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
   const handleWheel = (e: React.WheelEvent) => {
     if (shouldReduceMotion) return;
     
-    // Check if the scroll event is significant enough
     if (Math.abs(e.deltaY) > 25 || Math.abs(e.deltaX) > 25) {
       e.preventDefault();
       
@@ -38,14 +38,12 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
         prevProject();
       }
 
-      // 400ms throttle to prevent fast scrolling skips
       wheelTimeout.current = setTimeout(() => {
         wheelTimeout.current = null;
       }, 400);
     }
   };
 
-  // Clean up wheel timeout on unmount
   useEffect(() => {
     return () => {
       if (wheelTimeout.current) clearTimeout(wheelTimeout.current);
@@ -60,7 +58,7 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
           Featured Work
         </h2>
         <p className="text-secondary-text mt-2 text-sm md:text-base max-w-md">
-          Scroll, drag, or swipe to explore. Click the center card to launch the product showcase.
+          Hover on side projects to rotate the deck. Click the active card to launch the product showcase.
         </p>
       </div>
 
@@ -87,12 +85,11 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
           </button>
         </div>
 
-        {/* Dynamic Drag/Swipe Area */}
+        {/* Dynamic Swipe/Hover Area */}
         <motion.div
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={(e, info) => {
-            // Register swiping gesture
             if (info.offset.x > 80) prevProject();
             else if (info.offset.x < -80) nextProject();
           }}
@@ -106,7 +103,7 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
             const offset = index - activeIndex;
             const isCenter = offset === 0;
             
-            // Calculate 3D translation metrics based on index offsets
+            // Calculate 3D transformation metrics based on index offsets
             const rotateYValue = shouldReduceMotion ? 0 : offset * -22;
             const zValue = shouldReduceMotion ? 0 : Math.abs(offset) * -160;
             const scaleValue = 1 - Math.min(Math.abs(offset) * 0.15, 0.3);
@@ -120,6 +117,11 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
             return (
               <motion.div
                 key={project.id}
+                onMouseEnter={() => {
+                  setActiveIndex(index);
+                  setHoveredIndex(index);
+                }}
+                onMouseLeave={() => setHoveredIndex(null)}
                 animate={{
                   x: xOffset,
                   scale: scaleValue,
@@ -145,13 +147,13 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
                   }
                 }}
               >
-                {/* Visual grid / details */}
+                {/* Header info */}
                 <div className="flex justify-between items-start">
                   <span className="text-[10px] font-mono tracking-widest text-secondary-text uppercase px-2 py-0.5 border border-border-color bg-black/60 rounded">
                     Engine {index + 1}
                   </span>
                   
-                  {isCenter && (
+                  {isCenter && hoveredIndex === index && (
                     <motion.div
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
@@ -163,25 +165,38 @@ export default function FeaturedProjects({ onSelectProject }: FeaturedProjectsPr
                   )}
                 </div>
 
-                <div className="space-y-3">
+                {/* Title and details wrapper */}
+                <div className="space-y-1">
                   <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight leading-tight">
                     {project.title}
                   </h3>
                   
-                  <p className="text-xs md:text-sm text-secondary-text leading-relaxed line-clamp-2">
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {project.techStack.slice(0, 3).map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-[9px] font-mono text-white/70 bg-white/5 border border-white/5 px-2 py-0.5 rounded"
+                  <AnimatePresence>
+                    {hoveredIndex === index && isCenter && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        className="overflow-hidden space-y-3 pt-2"
                       >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+                        <p className="text-xs text-secondary-text leading-relaxed line-clamp-2">
+                          {project.description}
+                        </p>
+                        
+                        <div className="flex flex-wrap gap-1.5">
+                          {project.techStack.slice(0, 3).map((tech) => (
+                            <span
+                              key={tech}
+                              className="text-[9px] font-mono text-white/70 bg-white/5 border border-white/5 px-2 py-0.5 rounded"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </motion.div>
             );

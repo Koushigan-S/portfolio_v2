@@ -12,7 +12,6 @@ import Education from "@/components/Education";
 import ResumeSection from "@/components/ResumeSection";
 import Contact from "@/components/Contact";
 import Preloader from "@/components/Preloader";
-import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import AmbientBackground from "@/components/AmbientBackground";
 import { Project } from "@/data/portfolio";
@@ -28,8 +27,7 @@ export default function Home() {
         {!isLoaded && <Preloader onComplete={() => setIsLoaded(true)} />}
       </AnimatePresence>
 
-      {/* Desktop-only custom follower cursor */}
-      <CustomCursor />
+
 
       {/* Thin reading progress indicator */}
       <ScrollProgress />

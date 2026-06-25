@@ -58,17 +58,17 @@ export default function Hero() {
         <h1 className="text-4xl md:text-7xl font-bold tracking-tight text-white leading-[1.1] flex flex-col">
           <span className="block overflow-hidden py-1">
             <motion.span variants={lineVariants} className="block">
-              Building systems,
+              <TextDistort>Building systems,</TextDistort>
             </motion.span>
           </span>
           <span className="block overflow-hidden py-1">
             <motion.span variants={lineVariants} className="block">
-              products, and ideas
+              <TextDistort>products, and ideas</TextDistort>
             </motion.span>
           </span>
           <span className="block overflow-hidden py-1 text-secondary-text">
-            <motion.span variants={lineVariants} className="block">
-              for the future.
+            <motion.span variants={lineVariants} className="block text-secondary-text">
+              <TextDistort className="text-secondary-text">for the future.</TextDistort>
             </motion.span>
           </span>
         </h1>

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, useReducedMotion, Variants } from "framer-motion";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface TextDistortProps {
   children: string;
@@ -10,63 +10,105 @@ interface TextDistortProps {
 }
 
 export default function TextDistort({ children, className = "", as = "span" }: TextDistortProps) {
-  const [isHovered, setIsHovered] = useState(false);
   const shouldReduceMotion = useReducedMotion();
   const Tag = as;
+  
+  // Refs for tracking each individual letter's layout bounding box
+  const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+
+  // Initialize refs array length
+  const letters = children.split("");
+  
+  useEffect(() => {
+    letterRefs.current = letterRefs.current.slice(0, letters.length);
+  }, [letters.length]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (shouldReduceMotion) return;
+    setMousePos({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos(null);
+  };
 
   if (shouldReduceMotion) {
     return <Tag className={className}>{children}</Tag>;
   }
 
-  // Refraction offsets
-  const leftLayer: Variants = {
-    hover: {
-      x: [-2, 1, 0],
-      y: [1, -1, 0],
-      opacity: [0.7, 0.4, 0],
-      transition: { duration: 0.2, ease: "easeOut" }
-    },
-    initial: { x: 0, y: 0, opacity: 0 }
-  };
-
-  const rightLayer: Variants = {
-    hover: {
-      x: [2, -1, 0],
-      y: [-1, 1, 0],
-      opacity: [0.7, 0.4, 0],
-      transition: { duration: 0.2, ease: "easeOut" }
-    },
-    initial: { x: 0, y: 0, opacity: 0 }
-  };
-
   return (
     <Tag
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`relative inline-block ${className}`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`inline-flex flex-wrap relative ${className}`}
     >
-      {/* Red offset layer (mix-blend-screen blends it with cyan and base white) */}
-      <motion.span
-        variants={leftLayer}
-        animate={isHovered ? "hover" : "initial"}
-        className="absolute inset-0 text-[#ff0055] select-none pointer-events-none mix-blend-screen"
-        aria-hidden="true"
-      >
-        {children}
-      </motion.span>
+      {letters.map((char, index) => {
+        // Calculate interactive transform metrics based on distance to cursor
+        let translateY = 0;
+        let scaleY = 1;
+        let scaleX = 1;
 
-      {/* Cyan offset layer */}
-      <motion.span
-        variants={rightLayer}
-        animate={isHovered ? "hover" : "initial"}
-        className="absolute inset-0 text-[#00ffff] select-none pointer-events-none mix-blend-screen"
-        aria-hidden="true"
-      >
-        {children}
-      </motion.span>
+        if (mousePos && letterRefs.current[index]) {
+          const rect = letterRefs.current[index]!.getBoundingClientRect();
+          const charCenterX = rect.left + rect.width / 2;
+          const charCenterY = rect.top + rect.height / 2;
+          
+          // Euclidean distance to cursor
+          const distance = Math.sqrt(
+            Math.pow(mousePos.x - charCenterX, 2) + 
+            Math.pow(mousePos.y - charCenterY, 2)
+          );
 
-      {/* Base text */}
-      <span className="relative z-10">{children}</span>
+          const maxDistance = 140; // range of the distortion wave
+          if (distance < maxDistance) {
+            // Normalized factor from 0 (at edge) to 1 (directly under cursor)
+            const factor = 1 - distance / maxDistance;
+            // Smooth curve mapping (cosine transition)
+            const smoothFactor = Math.sin(factor * Math.PI / 2);
+
+            // Bends character upwards and stretches it vertically
+            translateY = -24 * smoothFactor;
+            scaleY = 1 + 0.45 * smoothFactor;
+            scaleX = 1 - 0.18 * smoothFactor;
+          }
+        }
+
+        // Handle space rendering to prevent collapsing
+        if (char === " ") {
+          return (
+            <span
+              key={index}
+              ref={(el) => { letterRefs.current[index] = el; }}
+              className="inline-block"
+              style={{ width: "0.25em" }}
+            >
+              &nbsp;
+            </span>
+          );
+        }
+
+        return (
+          <motion.span
+            key={index}
+            ref={(el) => { letterRefs.current[index] = el; }}
+            animate={{
+              y: translateY,
+              scaleY: scaleY,
+              scaleX: scaleX,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 350,
+              damping: 22,
+              mass: 0.5
+            }}
+            className="inline-block origin-bottom select-none cursor-default text-current"
+          >
+            {char}
+          </motion.span>
+        );
+      })}
     </Tag>
   );
 }
